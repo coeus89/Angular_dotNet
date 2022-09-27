@@ -6,6 +6,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+// Create a CORS policy to allow the UI application to 
+// access this API service.
+builder.Services.AddCors((options) => 
+{ 
+    options.AddPolicy("angularApplication", (builder) => 
+    {
+        builder.WithOrigins("http://localhost:4200")
+        .AllowAnyHeader()
+        .WithMethods("GET", "POST", "PUT", "DELETE")
+        .WithExposedHeaders("*");
+    });
+});
+
 builder.Services.AddControllers();
 
 // This is the database context for the student admin console
@@ -30,6 +43,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Use the CORS policy
+app.UseCors("angularApplication");
 
 app.UseAuthorization();
 

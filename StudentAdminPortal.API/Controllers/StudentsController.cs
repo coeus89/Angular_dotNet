@@ -21,8 +21,7 @@ namespace StudentAdminPortal.API.Controllers
         public async Task<IActionResult> GetAllStudentsAsync()
         {
             var students = await _studentRepository.GetStudentsAsync();
-            var domainModelStudents = new List<DomainModels.Student>();
-            Thread.Sleep(10000);
+            List<DomainModels.Student> domainModelStudents = _mapper.Map<List<DomainModels.Student>>(students);
 
             //foreach (var student in students)
             //{
@@ -51,8 +50,7 @@ namespace StudentAdminPortal.API.Controllers
             //    });
             //}
             //return Ok(domainModelStudents);
-
-            return Ok(_mapper.Map<List<DataModels.Student>>(students));
+            return Ok(domainModelStudents);
         }
     }
 }
