@@ -17,10 +17,10 @@ namespace StudentAdminPortal.API.Controllers
         }
 
         [HttpGet]
-        [Route("[controller]")]
+        [Route("[controller]")]  // This means '/students' for some reason
         public async Task<IActionResult> GetAllStudentsAsync()
         {
-            var students = await _studentRepository.GetStudentsAsync();
+            List<DataModels.Student> students = await _studentRepository.GetStudentsAsync();
             List<DomainModels.Student> domainModelStudents = _mapper.Map<List<DomainModels.Student>>(students);
 
             //foreach (var student in students)
@@ -52,5 +52,18 @@ namespace StudentAdminPortal.API.Controllers
             //return Ok(domainModelStudents);
             return Ok(domainModelStudents);
         }
+
+        [HttpGet]
+        [Route("[controller]/{studentId:Guid}")]
+        public async Task<IActionResult> GetStudentAsync([FromRoute]Guid studentId)
+        {
+            DataModels.Student student = await _studentRepository.GetStudentAsync(studentId);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<DomainModels.Student>(student));
+        }
     }
+
 }
